@@ -1,14 +1,23 @@
 from django.shortcuts import render
+from .models import Contact
 
 def index(request):
-    products = [
-        {"name": "Laptop", "price": 3000},
-        {"name": "Phone", "price": 2000},
-        {"name": "Headphones", "price": 500},
-        {"name": "T-Shirt", "price": 120},
-        {"name": "Jacket", "price": 350},
-        {"name": "Shoes", "price": 400},
-        {"name": "Watch", "price": 900},
-        {"name": "Bag", "price": 250},
-    ]
-    return render(request, "products.html", {"products": products})
+    return render(request, "products.html")
+
+def contact(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        Contact.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
+        return render(request, "success.html")
+
+    return render(request, "contact.html")
